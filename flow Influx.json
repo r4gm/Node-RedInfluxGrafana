@@ -1,0 +1,179 @@
+[
+    {
+        "id": "6fa2e50560b5058b",
+        "type": "tab",
+        "label": "Procesador Influx Grafana",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "e213099d02c4419f",
+        "type": "cpu",
+        "z": "6fa2e50560b5058b",
+        "name": "% Processor",
+        "msgCore": false,
+        "msgOverall": true,
+        "msgArray": false,
+        "msgTemp": false,
+        "x": 330,
+        "y": 60,
+        "wires": [
+            [
+                "00dc45f9b5b49a48"
+            ]
+        ]
+    },
+    {
+        "id": "5913c0ec2fcf1ab6",
+        "type": "inject",
+        "z": "6fa2e50560b5058b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 120,
+        "wires": [
+            [
+                "42a9034b80a22a55",
+                "e213099d02c4419f",
+                "23630d8b8730a077"
+            ]
+        ]
+    },
+    {
+        "id": "00dc45f9b5b49a48",
+        "type": "function",
+        "z": "6fa2e50560b5058b",
+        "name": "",
+        "func": "msg.payload = {'overallUsage': msg.payload};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 60,
+        "wires": [
+            [
+                "e78d58e6769cca93"
+            ]
+        ]
+    },
+    {
+        "id": "2ba756baa2d3e06f",
+        "type": "function",
+        "z": "6fa2e50560b5058b",
+        "name": "",
+        "func": "msg.payload2 = {};\nmsg.payload2.model = msg.payload[0].model;\nfor(i = 0; i < msg.payload.length; i++){\n    coreU = 'core_'+(i+1)+'_usage';\n    coreS = 'core_'+(i+1)+'_speed';\n    msg.payload2[coreU] = msg.payload[i].usage;\n    msg.payload2[coreS] = msg.payload[i].speed;\n}\nmsg.payload = msg.payload2;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 140,
+        "wires": [
+            [
+                "e78d58e6769cca93"
+            ]
+        ]
+    },
+    {
+        "id": "23630d8b8730a077",
+        "type": "cpu",
+        "z": "6fa2e50560b5058b",
+        "name": "Core Usage",
+        "msgCore": false,
+        "msgOverall": false,
+        "msgArray": true,
+        "msgTemp": false,
+        "x": 330,
+        "y": 140,
+        "wires": [
+            [
+                "2ba756baa2d3e06f"
+            ]
+        ]
+    },
+    {
+        "id": "42a9034b80a22a55",
+        "type": "cpu",
+        "z": "6fa2e50560b5058b",
+        "name": "Temp Core",
+        "msgCore": false,
+        "msgOverall": false,
+        "msgArray": false,
+        "msgTemp": true,
+        "x": 330,
+        "y": 220,
+        "wires": [
+            [
+                "1e1662add2bd8ff7"
+            ]
+        ]
+    },
+    {
+        "id": "1e1662add2bd8ff7",
+        "type": "function",
+        "z": "6fa2e50560b5058b",
+        "name": "",
+        "func": "msg.payload2 = {};\nmsg.payload2.avgTemp = msg.payload;\nmsg.payload2.maxTemp = msg.max;\nfor(i = 0; i < msg.cores.length; i++){\n    coreT = 'core_'+(i+1)+'_temp';\n    msg.payload2[coreT] = msg.cores[i];\n}\nmsg.payload = msg.payload2;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 220,
+        "wires": [
+            [
+                "e78d58e6769cca93"
+            ]
+        ]
+    },
+    {
+        "id": "e78d58e6769cca93",
+        "type": "influxdb out",
+        "z": "6fa2e50560b5058b",
+        "influxdb": "286b640d08d5ecfd",
+        "name": "InfluxDB",
+        "measurement": "RaspbianOS",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "C",
+        "bucket": "testBucket",
+        "x": 700,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "286b640d08d5ecfd",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "database",
+        "name": "InfluxCloud",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "https://us-east-1-1.aws.cloud2.influxdata.com/",
+        "rejectUnauthorized": true
+    }
+]
