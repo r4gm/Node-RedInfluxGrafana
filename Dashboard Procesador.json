@@ -77,7 +77,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1641946676985,
+  "iteration": 1641955430431,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -358,12 +358,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "purple",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -373,39 +369,19 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "TempDebian"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Debian Laptop"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "TempRaspbian"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Raspberry pi"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Raspberry pi"
+              "options": "Temperatura"
             },
             "properties": [
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "yellow",
+                  "fixedColor": "semi-dark-yellow",
                   "mode": "fixed"
                 }
+              },
+              {
+                "id": "displayName",
+                "value": "Temperatura Promedio"
               }
             ]
           }
@@ -436,7 +412,7 @@
             "uid": "${DS_INFLUXDB}"
           },
           "hide": false,
-          "query": "from(bucket: \"testBucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"${OS}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avgTemp\")\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({_time: r._time, TempRaspbian: r.avgTemp}))",
+          "query": "from(bucket: \"testBucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"${OS}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avgTemp\")\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({_time: r._time, Temperatura: r.avgTemp}))",
           "refId": "B"
         }
       ],
@@ -501,63 +477,19 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "UsageDebian"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Debian Laptop"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "UsageRaspbian"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Raspberry pi"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "UsageMacOS"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "MacBook Air"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "UsageWindows11"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Windows 11"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Raspberry pi"
+              "options": "Usage"
             },
             "properties": [
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "purple",
+                  "fixedColor": "dark-purple",
                   "mode": "fixed"
                 }
+              },
+              {
+                "id": "displayName",
+                "value": "Uso"
               }
             ]
           }
@@ -588,7 +520,7 @@
             "uid": "${DS_INFLUXDB}"
           },
           "hide": false,
-          "query": "from(bucket: \"testBucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"${OS}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"overallUsage\")\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({_time: r._time, UsageRaspbian: r.overallUsage}))",
+          "query": "from(bucket: \"testBucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"${OS}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"overallUsage\")\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({_time: r._time, Usage: r.overallUsage}))",
           "refId": "B"
         }
       ],
@@ -852,27 +784,19 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "TempRaspbian"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Raspberry pi"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Raspberry pi"
+              "options": "TempMax"
             },
             "properties": [
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "blue",
+                  "fixedColor": "dark-blue",
                   "mode": "fixed"
                 }
+              },
+              {
+                "id": "displayName",
+                "value": "Temperatura Máxima"
               }
             ]
           }
@@ -903,7 +827,7 @@
             "uid": "${DS_INFLUXDB}"
           },
           "hide": false,
-          "query": "from(bucket: \"testBucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"${OS}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"maxTemp\")\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({_time: r._time, TempRaspbian: r.maxTemp}))",
+          "query": "from(bucket: \"testBucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"${OS}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"maxTemp\")\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({_time: r._time, TempMax: r.maxTemp}))",
           "refId": "B"
         }
       ],
@@ -1208,7 +1132,7 @@
       "type": "bargauge"
     }
   ],
-  "refresh": "5s",
+  "refresh": "",
   "schemaVersion": 34,
   "style": "dark",
   "tags": [],
@@ -1259,6 +1183,6 @@
   "timezone": "",
   "title": "Dashboard Procesador",
   "uid": "_j9Z380nz1",
-  "version": 8,
+  "version": 11,
   "weekStart": ""
 }
